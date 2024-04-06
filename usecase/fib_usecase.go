@@ -15,13 +15,6 @@ func NewFibUsecase() FibUsecase {
 }
 
 func (fu *fibUsecase) GetFib(n uint) big.Int {
-	return calcFibByDP(n)
-}
-
-/*
- * O(n)
- */
-func calcFibByDP(n uint) big.Int {
 	dp := make([]big.Int, n+1)
 
 	dp[1] = *big.NewInt(1)
@@ -39,5 +32,3 @@ func calcFibByDP(n uint) big.Int {
 
 	return dp[n]
 }
-
-// 別のアルゴリズムを使う場合はメソッドを追加してGetFib内で切り替える

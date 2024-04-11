@@ -19,9 +19,12 @@ func NewFibController(fu usecase.FibUsecase) FibController {
 	return &fibController{fu}
 }
 
-type GetFibResponse struct {
+type GetFibResponseSuccess struct {
 	// GoのuInt64の最大値を超える可能性があるため、stringで返す
-	Result  string `json:"result"`
+	Result string `json:"result"`
+}
+
+type GetFibResponseError struct {
 	Message string `json:"message"`
 }
 
@@ -34,16 +37,16 @@ func (fc *fibController) GetFib(c *gin.Context) {
 	nString := c.Query("n")
 	n, err := strconv.Atoi(nString)
 	if err != nil {
-		c.JSON(400, GetFibResponse{Message: InvalidParameterMessageNotInt})
+		c.JSON(400, GetFibResponseError{Message: InvalidParameterMessageNotInt})
 		return
 	}
 	if n <= 0 {
-		c.JSON(400, GetFibResponse{Message: InvalidParameterMessageNotNatural})
+		c.JSON(400, GetFibResponseError{Message: InvalidParameterMessageNotNatural})
 		return
 	}
 	nUint := uint(n)
 	fibBigInt := fc.fu.GetFib(nUint)
 	fibString := fibBigInt.String()
 
-	c.JSON(200, GetFibResponse{Result: fibString})
+	c.JSON(200, GetFibResponseSuccess{Result: fibString})
 }
